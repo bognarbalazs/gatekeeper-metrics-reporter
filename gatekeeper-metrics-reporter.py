@@ -16,6 +16,7 @@ http_port = int(os.getenv("HTTP_PORT"))
 token = os.getenv("TOKEN")
 constraints_apiversion = os.getenv("CONSTRAINTS_APIVERSION")
 log_level = os.getenv("LOG_LEVEL")
+CONSTRAINT_API_URL = "https://kubernetes.default.svc/apis/constraints.gatekeeper.sh"
 
 # set logger
 logger = logging.getLogger(__name__)
@@ -36,38 +37,38 @@ prometheus_client.REGISTRY.unregister(prometheus_client.PROCESS_COLLECTOR)
 
 
 def get_constraints(token, constraints_apiversion):
-    url = f"https://kubernetes.default.svc/apis/constraints.gatekeeper.sh/{constraints_apiversion}"
+    url = f"{CONSTRAINT_API_URL}/{constraints_apiversion}"
     headers = {
         'Accept': 'application/json',
         'Authorization': f'Bearer {token}'
     }
     response = requests.request("GET", url, headers=headers, data={})
 
-    logger.debug(f"https://kubernetes.default.svc/apis/constraints.gatekeeper.sh/{constraints_apiversion} request is completed")
+    logger.debug(f"{CONSTRAINT_API_URL}/{constraints_apiversion} request is completed")
     return list(set(list(map(lambda constraint: constraint['kind'], response.json()['resources']))))
 
 
 def get_constraints_object_per_kind(token, constraints_apiversion, constraint_kind: str):
-    url = f"https://kubernetes.default.svc/apis/constraints.gatekeeper.sh/{constraints_apiversion}/{constraint_kind.lower()}"
+    url = f"{CONSTRAINT_API_URL}/{constraints_apiversion}/{constraint_kind.lower()}"
     headers = {
         'Accept': 'application/json',
         'Authorization': f'Bearer {token}'
     }
     response = requests.request("GET", url, headers=headers, data={})
 
-    logger.debug(f"https://kubernetes.default.svc/apis/constraints.gatekeeper.sh/{constraints_apiversion}/{constraint_kind.lower()} request is completed")
+    logger.debug(f"{CONSTRAINT_API_URL}/{constraints_apiversion}/{constraint_kind.lower()} request is completed")
     return list(map(lambda constraint_object: constraint_object['metadata']['name'], response.json()['items']))
 
 
 def get_violations(token, constraints_apiversion, constraint_kind: str, constraint_object: str):
-    url = f"https://kubernetes.default.svc/apis/constraints.gatekeeper.sh/{constraints_apiversion}/{constraint_kind.lower()}/{constraint_object}"
+    url = f"{CONSTRAINT_API_URL}/{constraints_apiversion}/{constraint_kind.lower()}/{constraint_object}"
     headers = {
         'Accept': 'application/json',
         'Authorization': f'Bearer {token}'
     }
     response = requests.request("GET", url, headers=headers, data={})
 
-    logger.debug(f"https://kubernetes.default.svc/apis/constraints.gatekeeper.sh/{constraints_apiversion}/{constraint_kind.lower()}/{constraint_object} request is completed")
+    logger.debug(f"{CONSTRAINT_API_URL}/{constraints_apiversion}/{constraint_kind.lower()}/{constraint_object} request is completed")
     return response.json()['status']
 
 
