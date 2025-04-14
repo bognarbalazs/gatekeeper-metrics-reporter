@@ -1,0 +1,87 @@
+[project]
+authors = [
+    { name="Balázs Bognár", github="bognarbalazs" },
+]
+classifiers = [
+   "Programming Language :: Python :: 3",
+   "Operating System :: OS Independent",
+]
+description = "Gatekeeper-metrics-reporter is designed to make Prometheus metric from violation reports of OPA Gatekeeper. With the generated metric, you are able to visualize reports."
+name = "gatekeeper-metrics-reporter"
+keywords = ["opa", "gatekeeper", "promethes-metrics","metrics-reporter", "kubernetes", "deployment", "automation"]
+dynamic = ["version"]
+dependencies = [
+    "logzero==1.7.0",
+    "requests==2.32.3",
+    "prometheus-client==0.21.1",
+    "fastapi==0.115.12",
+    "uvicorn==0.34.1"
+]
+
+requires-python = ">= 3.12"
+readme="README.md"
+
+[project.optional-dependencies]
+test = [
+    "logzero==1.7.0",
+    "pytest-cov==6.1.1",
+    "httpx==0.28.1"
+]
+
+[project.scripts]
+gatekeeper-metrics-reporter = "gatekeeper_metrics_reporter.main:main"
+
+[build-system]
+requires = [
+    "hatch==1.14.1",
+    "hatchling==1.27.0",
+    "versioningit==3.1.2"
+]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+source = "versioningit"
+default-version = "0.0.0+unknown"
+
+[tool.hatch.version.format]
+distance = "{next_version}.dev{distance}+{vcs}{rev}"
+dirty = "{version}+dirty"
+distance-dirty = "{next_version}.dev{distance}+{vcs}{rev}.dirty"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/gatekeeper_metrics_reporter"]
+"src/gatekeeper_metrics_reporter" = ["gatekeeper-metrics-reporter"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/src"
+]
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "src"
+]
+log_cli = true
+log_cli_level = "DEBUG"
+log_cli_format = "%(asctime)s [%(levelname)8s] %(message)s (%(filename)s:%(lineno)s)"
+log_cli_date_format = "%Y-%m-%d %H:%M:%S"
+
+[tool.coverage.run]
+command_line= "-m pytest --junitxml=report.xml --cov --cov-report term --cov-report html:coverage.html -v"
+omit = [
+    # omit anything in a .local directory anywhere
+    "*/.local/*",
+    # omit everything in /usr
+    "/usr/*",
+    # omit everything in src/
+    "src/**"
+    ]
+
+[tool.coverage.report]
+fail_under = 70
+show_missing = false
+
+[tool.coverage.paths]
+source = [
+    "tests/",
+    ]
