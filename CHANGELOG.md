@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/bognarbalazs/gatekeeper-metrics-reporter/compare/v1.0.0...v1.0.1) (2025-04-14)
+
+
+### Bug Fixes
+
+* correct workflow file name ([7b0dcc5](https://github.com/bognarbalazs/gatekeeper-metrics-reporter/commit/7b0dcc5a6396d7e0fd4d5f77c329c1be8009c5fa))
+
 # 1.0.0 (2025-04-14)
 
 
