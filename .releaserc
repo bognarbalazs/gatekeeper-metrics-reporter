@@ -21,7 +21,7 @@ plugins:
     - publishCmd: |
         python -m build
       successCmd: |
-        gh workflow run post-release.yml \
+        gh workflow run docker.yml \
         --field version=${nextRelease.version}
   - - "@semantic-release/github"
     - assets:
