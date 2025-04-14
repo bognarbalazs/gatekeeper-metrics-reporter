@@ -20,7 +20,7 @@ plugins:
   - - "@semantic-release/exec"
     - publishCmd: |
         python -m build
-    - successCmd: |
+      successCmd: |
         gh workflow run post-release.yml \
         --field version=${nextRelease.version}
   - - "@semantic-release/github"
