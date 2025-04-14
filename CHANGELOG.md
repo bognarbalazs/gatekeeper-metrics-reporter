@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/bognarbalazs/gatekeeper-metrics-reporter/compare/v1.0.1...v1.0.2) (2025-04-14)
+
+
+### Bug Fixes
+
+* add write permission at actions to be able to call workflow ([664eeae](https://github.com/bognarbalazs/gatekeeper-metrics-reporter/commit/664eeaed8155f14c51f840c74c250869f7b8bbf5))
+
 ## [1.0.1](https://github.com/bognarbalazs/gatekeeper-metrics-reporter/compare/v1.0.0...v1.0.1) (2025-04-14)
 
 
