@@ -1,39 +1,41 @@
-import requests
 import os
-import prometheus_client
 import sys
-import logging
-from pythonjsonlogger import jsonlogger
-from fastapi import FastAPI, Response
-import uvicorn
 
-# Create app
-app = FastAPI(debug=False)
+import prometheus_client
+import requests
+import uvicorn
+from fastapi import FastAPI, Response, app
+from log_setup import setup_logging
 
 # initialize variables
 pod_ip = os.getenv("POD_IP")
-http_port = int(os.getenv("HTTP_PORT"))
+http_port = int(os.getenv("HTTP_PORT",8000))
 token = os.getenv("TOKEN")
-constraints_apiversion = os.getenv("CONSTRAINTS_APIVERSION")
-log_level = os.getenv("LOG_LEVEL")
-CONSTRAINT_API_URL = "https://kubernetes.default.svc/apis/constraints.gatekeeper.sh"
+constraints_apiversion = os.getenv("CONSTRAINTS_APIVERSION",'v1beta1')
+log_level_name = os.getenv("LOG_LEVEL").upper()
+enable_access_log = bool(os.getenv("ENABLE_ACCESS_LOG",True))
+log_to_file = bool(os.getenv("LOG_TO_FILE", True))
+log_file_path = os.getenv("LOG_FILE_PATH")
+enable_json_log_format = bool(os.getenv("ENABLE_JSON_LOG_FORMAT", True))
+CONSTRAINT_API_URL = "https://192.168.64.9:6443/apis/constraints.gatekeeper.sh"
+# base_url = "https://kubernetes.default.svc/apis/constraints.gatekeeper.sh"
+# Create app
+app = FastAPI()
 
-# set logger
-logger = logging.getLogger(__name__)
-level = logging.getLevelName(f'{log_level.upper()}')
-logger.setLevel(level)
-stdout_handler = logging.StreamHandler(stream=sys.stdout)
+# Setup logging
+logger = setup_logging(log_level_name=log_level_name, json_logging=enable_json_log_format, log_to_file=log_to_file, log_file_path=log_file_path)
 
-# format with JSON
-format_output = jsonlogger.JsonFormatter('%(levelname)s : %(name)s : %(message)s : %(asctime)s')
 
-stdout_handler.setFormatter(format_output)
-logger.addHandler(stdout_handler)
-
-# # disable default metrics collect
+# disable default metrics collect
 prometheus_client.REGISTRY.unregister(prometheus_client.GC_COLLECTOR)
 prometheus_client.REGISTRY.unregister(prometheus_client.PLATFORM_COLLECTOR)
 prometheus_client.REGISTRY.unregister(prometheus_client.PROCESS_COLLECTOR)
+
+#Create metrics "class"
+gatekeeper_audit_violation_reports = prometheus_client.Gauge('gatekeeper_audit_violation_reports',
+                                                        'Violation reports from the gatekeeper audit',
+                                                        ['constraint_kind','namespace', 'kind', 'name', 'enforcementAction', 'message'])
+
 
 
 def get_constraints(token, constraints_apiversion):
@@ -86,10 +88,7 @@ def iterate_over_dict_to_get_violations(dictionary: dict) -> dict:
     logger.debug("Make dictionary from constraint kind and objects is completed")
     return violations
 
-#Create metrics "class"
-gatekeeper_audit_violation_reports = prometheus_client.Gauge('gatekeeper_audit_violation_reports',
-                                                        'Violation reports from the gatekeeper audit',
-                                                        ['constraint_kind','namespace', 'kind', 'name', 'enforcementAction', 'message'])
+
 
 def iterate_over_violation_reports(dict: dict):
     for key,value in dict.items():
@@ -166,6 +165,6 @@ def main():
 
 if __name__ == "__main__":
     try:
-        uvicorn.run(app, host=f'{pod_ip}', port=http_port)
+        uvicorn.run(app, host=f'{pod_ip}', port=http_port,log_config=None,access_log=enable_access_log)
     except Exception as e:
         logger.error(e)
