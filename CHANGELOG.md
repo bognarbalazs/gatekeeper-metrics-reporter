@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/bognarbalazs/gatekeeper-metrics-reporter/compare/v1.0.2...v1.1.0) (2025-04-14)
+
+
+### Features
+
+* **docker-build:** implement docker build and push to ghcr ([9e81947](https://github.com/bognarbalazs/gatekeeper-metrics-reporter/commit/9e819479f0d16967dbd0ef4d724d669c60665e4f))
+
 ## [1.0.2](https://github.com/bognarbalazs/gatekeeper-metrics-reporter/compare/v1.0.1...v1.0.2) (2025-04-14)
 
 
