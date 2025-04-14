@@ -21,9 +21,8 @@ plugins:
     - publishCmd: |
         python -m build
     - successCmd: |
-        docker build -t gatekeeper-metrics-reporter:v${nextRelease.version} .
-        docker tag gatekeeper-metrics-reporter:v${nextRelease.version} ghcr.io/bognarbalazs/gatekeeper-metrics-reporter:v${nextRelease.version}
-        docker push ghcr.io/bognarbalazs/gatekeeper-metrics-reporter:v${nextRelease.version}
+        gh workflow run post-release.yml \
+        --field version=${nextRelease.version}
   - - "@semantic-release/github"
     - assets:
         # Wheel files
