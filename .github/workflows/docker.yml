@@ -1,0 +1,15 @@
+name: Post Release Tasks
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version"
+        required: true
+
+jobs:
+  docker-build-and-oush:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo version
+        run: echo "Running post-release steps for version ${{ inputs.version }}"
