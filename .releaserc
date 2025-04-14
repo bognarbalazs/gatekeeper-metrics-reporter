@@ -22,7 +22,7 @@ plugins:
         python -m build
       successCmd: |
         gh workflow run docker.yml \
-        --field version=${nextRelease.version}
+        --field version=v${nextRelease.version}
   - - "@semantic-release/github"
     - assets:
         # Wheel files
