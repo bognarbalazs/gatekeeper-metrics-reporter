@@ -2,6 +2,7 @@ import logging
 import logging.config
 
 import logzero
+
 from config import LOG_FILE_PATH, LOG_LEVEL_NAME, LOG_TO_FILE
 
 LOG_LEVELS = {

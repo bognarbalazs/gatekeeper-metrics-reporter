@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Response
+
 from gatekeeper_client import client
 from log_setup import logger
 from prometheus import prometheus_manager

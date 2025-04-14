@@ -1,4 +1,5 @@
 import requests
+
 from config import CONSTRAINT_API_URL, CONSTRAINTS_API_VERSION, TOKEN
 from log_setup import logger
 from prometheus import prometheus_manager
@@ -168,4 +169,4 @@ client = GatekeeperClient(
     token=TOKEN,
     constraints_api_version=CONSTRAINTS_API_VERSION
 )
-logger.info(f"Initialized Gatekeeper client")
+logger.info("Initialized Gatekeeper client")

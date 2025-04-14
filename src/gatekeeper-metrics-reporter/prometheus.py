@@ -1,4 +1,5 @@
 import prometheus_client
+
 from log_setup import logger
 
 
@@ -56,7 +57,7 @@ class PrometheusManager:
         ).set(1)
 
 prometheus_manager = PrometheusManager()
-logger.debug(f"Initialized Prometheus manager")
+logger.debug("Initialized Prometheus manager")
 prometheus_manager.unregister_default_collectors()
-logger.debug(f"Unregistered default collectors")
+logger.debug("Unregistered default collectors")
 
