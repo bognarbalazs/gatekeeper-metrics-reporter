@@ -1,6 +1,6 @@
 import prometheus_client
 
-from log_setup import logger
+from gatekeeper_metrics_reporter.log_setup import logger
 
 
 class PrometheusManager:

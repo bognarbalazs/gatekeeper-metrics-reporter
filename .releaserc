@@ -1,0 +1,34 @@
+branches:
+  - main
+  - master
+  - name: beta
+    prerelease: true
+  - name: alpha
+    prerelease: true
+tagFormat: "v${version}"
+plugins:
+  - - "@semantic-release/commit-analyzer"
+  - - "@semantic-release/release-notes-generator"
+  - "@semantic-release/changelog"
+  - - "@semantic-release/git"
+    - assets:
+        - CHANGELOG.md
+      message: |-
+        chore(release): v${nextRelease.version}
+
+        ${nextRelease.notes}
+  - - "@semantic-release/exec"
+    - publishCmd: |
+        python -m build
+    - successCmd: |
+        docker build -t gatekeeper-metrics-reporter:v${nextRelease.version} .
+        docker tag gatekeeper-metrics-reporter:v${nextRelease.version} ghcr.io/bognarbalazs/gatekeeper-metrics-reporter:v${nextRelease.version}
+        docker push ghcr.io/bognarbalazs/gatekeeper-metrics-reporter:v${nextRelease.version}
+  - - "@semantic-release/github"
+    - assets:
+        # Wheel files
+        - path: dist/*.whl
+          label: Python Wheel Package
+        # Source distribution
+        - path: dist/*.tar.gz
+          label: Source Distribution

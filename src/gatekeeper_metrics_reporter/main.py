@@ -1,8 +1,8 @@
 import uvicorn
 
-from api import app
-from config import ENABLE_ACCESS_LOG, HTTP_PORT, POD_IP
-from log_setup import logger
+from gatekeeper_metrics_reporter.api import app
+from gatekeeper_metrics_reporter.config import ENABLE_ACCESS_LOG, HTTP_PORT, POD_IP
+from gatekeeper_metrics_reporter.log_setup import logger
 
 
 def main():

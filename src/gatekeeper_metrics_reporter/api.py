@@ -1,8 +1,8 @@
 from fastapi import FastAPI, Response
 
-from gatekeeper_client import client
-from log_setup import logger
-from prometheus import prometheus_manager
+from gatekeeper_metrics_reporter.gatekeeper_client import client
+from gatekeeper_metrics_reporter.log_setup import logger
+from gatekeeper_metrics_reporter.prometheus import prometheus_manager
 
 app = FastAPI()
 
